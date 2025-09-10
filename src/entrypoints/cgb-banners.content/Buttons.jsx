@@ -15,7 +15,7 @@ export default function Button(props) {
     }
 
     return (
-        <div>
+        <div className="mainButtons">
             <button onClick={hideFunction} className='showImageBtn'>{isHidden ? 'Show image' : 'Hide image'}</button>
             <button onClick={() => setIsShow(!isShow)} className='openButton'>
                 <span>Open CGB Button</span>

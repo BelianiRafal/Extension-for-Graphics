@@ -16,7 +16,7 @@
   box-shadow: 1px 1px 10px #000;
   position: relative;
   right: -999px;
-  transition: right .4s ease;
+  transition: right 0.4s ease;
 
   &.active {
     right: 10px;
@@ -68,17 +68,17 @@
   transition: all 0.5s ease-out;
   cursor: pointer;
 
-  &.green {
+  &.addContext {
     background: #2a9d8f;
     border: 2px solid #2a9d8f;
   }
 
-  &.red {
+  &.fulfill {
     background: #e76f51;
     border: 2px solid #e76f51;
   }
 
-  &.yellow {
+  &.update {
     background: #8e7cc3;
     border: 2px solid #8e7cc3;
   }
@@ -138,6 +138,16 @@
   }
 }
 
+//Context
+.context {
+  width: 400px;
+  height: 400px;
+  background: #cecece;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 //Close Button
 .close__wrapper {
   display: flex;
@@ -182,6 +192,39 @@
   }
   &:active {
     background-color: rgb(130, 0, 0);
+  }
+}
+
+//Style button if loading
+.loaderWrapper {
+  display: flex;
+}
+
+.loaderClass {
+  padding: 0px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: $animated-btn-color-white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: $border-radius;
+  pointer-events: none;
+  border: none;
+
+  &.addContext {
+    background: #2a9d8f;
+    border: 2px solid #2a9d8f;
+  }
+
+  &.fulfill {
+    background: #e76f51;
+    border: 2px solid #e76f51;
+  }
+
+  &.update {
+    background: #8e7cc3;
+    border: 2px solid #8e7cc3;
   }
 }
 
@@ -253,4 +296,53 @@
   &:hover:before {
     left: 0;
   }
+}
+
+//Custom modal
+
+.fileName {
+  font-size: 20px;
+}
+
+.custum-file-upload {
+  height: 200px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #cacaca;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 48px 35px -48px rgba(0, 0, 0, 0.1);
+}
+
+.custum-file-upload .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .icon svg {
+  height: 80px;
+  fill: rgba(75, 85, 99, 1);
+}
+
+.custum-file-upload .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .text span {
+  font-weight: 400;
+  color: rgba(75, 85, 99, 1);
+}
+
+.custum-file-upload input {
+  display: none;
 }
