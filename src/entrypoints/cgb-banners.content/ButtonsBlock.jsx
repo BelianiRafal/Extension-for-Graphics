@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { convertToObject, getModal, dev, shopDev, shopProd, langSlugDesktop } from './assets/convertToObject.js';
-import ButtonsComp from './Components/ButtonsComp';
+import { convertToObject, getModal, dev, shopDev, shopProd,} from './assets/convertToObject.js';
+import ButtonsWrapper from './ButtonsWrapper.jsx';
+import CloseButton from './Components/CloseButton.jsx';
 import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
 import './styles/style.scss';
 
+
 export default function ButtonsBlock({ isShow, onClose }) {
-  const [isFile, setIsFile] = useState('');
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, isOfferInput] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const openShop = () => {
     const goToLink = window.location.origin === dev ? shopDev : shopProd;
@@ -60,51 +60,11 @@ export default function ButtonsBlock({ isShow, onClose }) {
     });
   };
 
-  const fulfillFunc = () => {
-    setLoading(true);
-    if (stateSlug.length === 0) {
-      getModal('error');
-      setLoading(false);
-      return;
-    }
-
-    offertInput.forEach(input => {
-      setInputValue(input, langSlugDesktop);
-    });
-  };
-
-  const setInputValue = (input, context) => {
-    const name = input.name;
-    try {
-      if (name in context && context[name] in stateSlug) {
-        input.value = stateSlug[context[name]];
-        setTimeout(() => {
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-          input.dispatchEvent(new Event('change', { bubbles: true }));
-          setLoading(false);
-        }, 5000);
-      }
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
-    }
-  };
-
   return (
     <>
       <div className={`buttonsBlock ${isShow ? 'active' : ''}`}>
-        <div className="close__wrapper">
-          <h2 className="buttonsBlock__title">Central Grid Panel</h2>
-          <button onClick={onClose} className="buttonsBlock__close">
-            <span className="X"></span>
-            <span className="Y"></span>
-          </button>
-        </div>
-        <div className="buttonsBlock__container">
-          <ButtonsComp componentFunction={openModal} name="Add Context" className="addContext" />
-          <ButtonsComp componentFunction={fulfillFunc} name="Fulfill Change" className="fulfill" loading={loading} />
-          <ButtonsComp name="Update" className="update" />
-        </div>
+        <CloseButton onClose={onClose}/>
+        <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />
         </div>

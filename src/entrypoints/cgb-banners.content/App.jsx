@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import Buttons from './Buttons';
-import ContextWindow from './ContextWindow';
+import MainButtons from './MainButtons';
 
 export default function App() {
   const [imageData, setImageData] = useState([]);
@@ -23,7 +22,7 @@ export default function App() {
 
   return (
     <>
-      <Buttons data={imageData}/>
+      <MainButtons data={imageData}/>
     </>
   );
 }

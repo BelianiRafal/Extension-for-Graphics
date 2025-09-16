@@ -6,6 +6,10 @@
   right: 20px;
 }
 
+.mainButtons {
+  height: 0;
+}
+
 .buttonsBlock {
   width: 400px;
   padding: 10px;
@@ -198,13 +202,13 @@
 //Style button if loading
 .loaderWrapper {
   display: flex;
+  align-items: center;
 }
 
 .loaderClass {
   padding: 0px 10px;
   font-size: 12px;
   font-weight: bold;
-  text-transform: uppercase;
   color: $animated-btn-color-white;
   text-align: center;
   text-decoration: none;
@@ -266,9 +270,14 @@
   border-radius: 10px;
   overflow: hidden;
   z-index: 1;
+  opacity: 1;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 6px 10px rgba($button-box-shadow-color, 0.1);
   cursor: pointer;
+
+  &.hide {
+    opacity: 0;
+  }
 
   &:hover {
     transform: scale(1);
