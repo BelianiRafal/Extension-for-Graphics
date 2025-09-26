@@ -4,13 +4,13 @@ import { langSlugDesktop } from './assets/convertToObject';
 import { getModal } from './assets/convertToObject';
 import './styles/style.scss';
 
-export default function ContextWindow({ openModal, offertInput, stateSlug }) {
+export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
     const [loading, setLoading] = useState(null);
 
   const fulfillFunc = () => {
     setLoading('fulfill');
     if (stateSlug.length === 0) {
-      getModal('error');
+      getModal('error', 'Please provide context!');
       setLoading(null);
       return;
     }

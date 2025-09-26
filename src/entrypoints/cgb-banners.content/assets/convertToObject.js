@@ -58,7 +58,7 @@ export const getModal = (status, text) => {
       Swal.fire({
         icon: 'success',
         title: 'File uploaded',
-        html: `<p>You selected: <strong className="fileName">${text.name}</strong></p>`,
+        html: text || '',
         timer: 2000,
         showConfirmButton: false,
       });
@@ -68,7 +68,7 @@ export const getModal = (status, text) => {
       Swal.fire({
         icon: 'warning',
         title: '(」°ロ°)」',
-        text: `Please provide context!`,
+        text: text,
         showConfirmButton: true,
       });
       break;

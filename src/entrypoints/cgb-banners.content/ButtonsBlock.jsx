@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
-import { convertToObject, getModal, dev, shopDev, shopProd,} from './assets/convertToObject.js';
+import { convertToObject, getModal, dev, shopDev, shopProd } from './assets/convertToObject.js';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
 import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
 import './styles/style.scss';
-
+import ChooseBtn from './Components/ChooseBtn.jsx';
 
 export default function ButtonsBlock({ isShow, onClose }) {
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, isOfferInput] = useState([]);
+
+  const [inputFile, setInputFile] = useState(null);
+
+  useEffect(() => {
+    const mainImageInput = document.querySelector('input[name="main_pic"]');
+    mainImageInput.classList.add('main-input');
+
+    setInputFile(mainImageInput);
+  }, []);
 
   const openShop = () => {
     const goToLink = window.location.origin === dev ? shopDev : shopProd;
@@ -43,7 +52,7 @@ export default function ButtonsBlock({ isShow, onClose }) {
         fileInput.addEventListener('change', e => {
           const fileInputData = e.target.files[0];
           if (fileInputData) {
-            getModal('success', fileInputData);
+            getModal('success', `<p>You selected: <strong className="fileName">${fileInputData.name}</strong></p>`);
             parseCSV(fileInputData);
           }
         });
@@ -63,10 +72,12 @@ export default function ButtonsBlock({ isShow, onClose }) {
   return (
     <>
       <div className={`buttonsBlock ${isShow ? 'active' : ''}`}>
-        <CloseButton onClose={onClose}/>
+        <CloseButton onClose={onClose} />
         <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />
+
+          <ChooseBtn domElement={inputFile} name={'Choose file'}/>
         </div>
       </div>
     </>
