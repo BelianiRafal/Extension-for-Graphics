@@ -18,8 +18,12 @@
 		"zip:firefox": "wxt zip -b firefox"
 	},
 	"dependencies": {
+		"papaparse": "^5.5.3",
 		"react": "^19.1.0",
-		"react-dom": "^19.1.0"
+		"react-dom": "^19.1.0",
+		"react-loader-spinner": "^6.1.6",
+		"sweetalert": "^2.1.2",
+		"sweetalert2": "^11.23.0"
 	},
 	"devDependencies": {
 		"@types/react": "^19.1.2",
