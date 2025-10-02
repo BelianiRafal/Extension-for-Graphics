@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 
 export default defineContentScript({
-  matches: ['https://prolodev.prologistics.info/shop_banner.php?id*'],
+  matches: ['https://prolodev.prologistics.info/shop_banner.php?id*', 'https://www.prologistics.info/shop_banner.php?id=*'],
   main() {
     const fullBody = document.body;
 
