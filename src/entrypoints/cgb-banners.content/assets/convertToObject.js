@@ -8,7 +8,7 @@ export const langSlugDesktop = {
   'offer_text[finnish]': 'fi',
   'offer_text[french]': 'fr',
   'offer_text[german]': 'dach',
-  'offer_text[germanDE]': 'dach',
+  'offer_text[germanDE]': 'de',
   'offer_text[Hungarian]': 'hu',
   'offer_text[italian]': 'it',
   'offer_text[norsk]': 'no',
