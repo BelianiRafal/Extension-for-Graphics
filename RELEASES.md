@@ -11,22 +11,22 @@ Use one of the following commands:
 > **Patch version bump (1.0.0 → 1.0.1)**
 
 ```
-bumpx patch
+bumpx patch / bunx bumpx patch
 ```
 
 > **Minor version bump (1.0.0 → 1.1.0)**
 
 ```
-bumpx minor
+bumpx minor / bunx bumpx minor
 ```
 
 > **Major version bump (1.0.0 → 2.0.0)**
 
 ```
-bumpx major
+bumpx major / bunx bumpx major
 ```
 
-If you want to create a pre-release version, use `bumpx prerelease`
+If you want to create a pre-release version, use `bumpx prerelease / bunx bumpx prerelease`
 
 [bumpx docs](http://bumpx.netlify.app/usage#version-bumping)
 
