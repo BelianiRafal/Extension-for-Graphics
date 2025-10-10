@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
 import './styles/style.scss';
-import ChooseBtn from './Components/ChooseBtn.jsx';
 
 export default function ButtonsBlock({ isShow, onClose }) {
   const [stateSlug, setStateSlug] = useState([]);
@@ -76,8 +75,6 @@ export default function ButtonsBlock({ isShow, onClose }) {
         <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />
-
-          <ChooseBtn domElement={inputFile} name={'Choose file'}/>
         </div>
       </div>
     </>
