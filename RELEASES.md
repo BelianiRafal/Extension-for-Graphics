@@ -10,23 +10,24 @@ Use one of the following commands:
 
 > **Patch version bump (1.0.0 → 1.0.1)**
 
-```
+```bash
 bumpx patch / bunx bumpx patch
 ```
 
 > **Minor version bump (1.0.0 → 1.1.0)**
 
-```
+```bash
+
 bumpx minor / bunx bumpx minor
 ```
 
 > **Major version bump (1.0.0 → 2.0.0)**
 
-```
+```bash
 bumpx major / bunx bumpx major
 ```
 
-If you want to create a pre-release version, use `bumpx prerelease / bunx bumpx prerelease`
+If you want to create a pre-release version, use `bumpx prerelease / bunx bumpx prereleaseg`
 
 [bumpx docs](http://bumpx.netlify.app/usage#version-bumping)
 
