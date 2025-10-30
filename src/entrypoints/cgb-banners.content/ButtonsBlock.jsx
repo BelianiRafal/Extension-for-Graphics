@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import { convertToObject, getModal, dev, shopDev, shopProd } from './assets/convertToObject.js';
+import { convertToObject, getModal, dev, shopDev, shopProd } from './assets/index.js';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
+import LoadZipButton from './Components/LoadZipButton.jsx';
 import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
 import './styles/style.scss';
 
+
 export default function ButtonsBlock({ isShow, onClose }) {
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, isOfferInput] = useState([]);
-
   const [inputFile, setInputFile] = useState(null);
 
   useEffect(() => {
@@ -75,6 +76,8 @@ export default function ButtonsBlock({ isShow, onClose }) {
         <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />
+
+          <LoadZipButton/>
         </div>
       </div>
     </>

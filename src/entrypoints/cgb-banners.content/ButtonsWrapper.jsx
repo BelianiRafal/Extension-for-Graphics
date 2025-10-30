@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ButtonsComp from './Components/ButtonsComp';
-import { langSlugDesktop } from './assets/convertToObject';
-import { getModal } from './assets/convertToObject';
+import Button from './Components/Button';
+import { langSlugDesktop } from './assets';
+import { getModal } from './assets';
 import './styles/style.scss';
 
 export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
@@ -53,15 +53,15 @@ export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
 
   return (
     <div className="buttonsBlock__container">
-      <ButtonsComp componentFunction={openModal} name="Add Context" className="addContext" />
-      <ButtonsComp
+      <Button componentFunction={openModal} name="Add Context" className="addContext" />
+      <Button
         componentFunction={fulfillFunc}
         name="Fulfill Change"
         className="fulfill"
         loading={loading === 'fulfill'}
         text={'Fill in the text'}
       />
-      <ButtonsComp
+      <Button
         componentFunction={realUpdate}
         name="Update"
         className="update"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ButtonsBlock from './ButtonsBlock';
 
 import './styles/style.scss';
@@ -10,6 +10,7 @@ export default function Button(props) {
   const hideFunction = () => {
     props.data.forEach(item => {
       item.style.display = `${isHidden ? 'block' : 'none'}`;
+
     });
     setIsHidden(!isHidden);
   };
