@@ -2,7 +2,12 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 
 export default defineContentScript({
-  matches: ['https://prolodev.prologistics.info/shop_banner.php?*', 'https://www.prologistics.info/shop_banner.php?*'],
+  matches: [
+    'https://prolodev.prologistics.info/shop_banners.php*',
+    'https://www.prologistics.info/shop_banners.php*',
+    'https://prolodev.prologistics.info/shop_banner.php*',
+    'https://www.prologistics.info/shop_banner.php*',
+  ],
   main() {
     const fullBody = document.body;
 
@@ -15,7 +20,6 @@ export default defineContentScript({
   },
 });
 
-export const initReactApp = (container) => {
+export const initReactApp = container => {
   const root = createRoot(container).render(<App />);
 };
-

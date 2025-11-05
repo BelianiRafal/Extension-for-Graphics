@@ -11,22 +11,22 @@ export default function LoadZipButton() {
   const [zipName, setZipName] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const modernMobile = [];
+  // useEffect(() => {
+  //   const modernMobile = [];
 
-    const form = document.querySelector('form.banner-form');
-    const input = form.querySelectorAll('input[type="file"][name^=pic][size="30"]');
-    const mobile_input = form.querySelectorAll('input[type="file"][name^=mobile_pic][size="30"]');
+  //   const form = document.querySelector('form.banner-form');
+  //   const input = form.querySelectorAll('input[type="file"][name^=pic][size="30"]');
+  //   const mobile_input = form.querySelectorAll('input[type="file"][name^=mobile_pic][size="30"]');
 
-    setDesktopFiles(Array.from(input));
+  //   setDesktopFiles(Array.from(input));
 
-    mobile_input.forEach((item, index) => {
-      if (index > 16) {
-        return modernMobile.push(item);
-      }
-    });
-    setMobilesFiles(Array.from(modernMobile));
-  }, []);
+  //   mobile_input.forEach((item, index) => {
+  //     if (index > 16) {
+  //       return modernMobile.push(item);
+  //     }
+  //   });
+  //   setMobilesFiles(Array.from(modernMobile));
+  // }, []);
 
   const handleZipUpload = async e => {
     try {
@@ -53,37 +53,37 @@ export default function LoadZipButton() {
     }
   };
 
-  useEffect(() => {
-    if (files.length === 0) return;
-    setLoading(true);
+  // useEffect(() => {
+  //   if (files.length === 0) return;
+  //   setLoading(true);
 
-    const sortedForDesktopOrMobile = () => {
-      try {
-        for (const item of files) {
-          if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
-            getModal('error', 'The file name must be in the format Slug_Desktop/Mobile');
-            return;
-          }
+  //   const sortedForDesktopOrMobile = () => {
+  //     try {
+  //       for (const item of files) {
+  //         if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
+  //           getModal('error', 'The file name must be in the format Slug_Desktop/Mobile');
+  //           return;
+  //         }
 
-          checkedDeviceType(item, 'desktop', desktopFiles);
-          checkedDeviceType(item, 'mobile', mobileFiles);
-        }
+  //         checkedDeviceType(item, 'desktop', desktopFiles);
+  //         checkedDeviceType(item, 'mobile', mobileFiles);
+  //       }
 
-        getModal('nyan', 'Files added to inputs!');
-      } catch (e) {
-        console.log(e);
-        getModal('error', 'Something went wrong');
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       getModal('nyan', 'Files added to inputs!');
+  //     } catch (e) {
+  //       console.log(e);
+  //       getModal('error', 'Something went wrong');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    const timer = setTimeout(() => {
-      sortedForDesktopOrMobile();
-    }, 2000);
+  //   const timer = setTimeout(() => {
+  //     sortedForDesktopOrMobile();
+  //   }, 2000);
 
-    return () => clearTimeout(timer);
-  }, [files]);
+  //   return () => clearTimeout(timer);
+  // }, [files]);
 
   return (
     <div className="zip__wrapper">

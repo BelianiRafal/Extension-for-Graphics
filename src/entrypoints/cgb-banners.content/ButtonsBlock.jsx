@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { convertToObject, getModal, dev, shopDev, shopProd } from './assets/index.js';
+import { convertToObject, getModal, dev, shopDev, shopProd, bannerDEV } from './assets/index.js';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
 import LoadZipButton from './Components/LoadZipButton.jsx';
@@ -7,19 +7,15 @@ import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
 import './styles/style.scss';
-
+import { URLContext } from './App.jsx';
 
 export default function ButtonsBlock({ isShow, onClose }) {
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, isOfferInput] = useState([]);
-  const [inputFile, setInputFile] = useState(null);
+  const [selectItem, setSelectItem] = useState([]);
+  const [hasClicked, setHasClicked] = useState(false);
 
-  useEffect(() => {
-    const mainImageInput = document.querySelector('input[name="main_pic"]');
-    mainImageInput.classList.add('main-input');
-
-    setInputFile(mainImageInput);
-  }, []);
+  const bannerURL = useContext(URLContext);
 
   const openShop = () => {
     const goToLink = window.location.origin === dev ? shopDev : shopProd;
@@ -30,6 +26,37 @@ export default function ButtonsBlock({ isShow, onClose }) {
     const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
     isOfferInput(offertInputNode);
   }, []);
+
+  useEffect(() => {
+    const findSelect = document.querySelector('select[name="shop_id"]');
+    if (!findSelect) return;
+    const findSelectItems = Array.from(findSelect.children);
+
+    setSelectItem(findSelectItems);
+  }, []);
+
+  useEffect(() => {
+    const getBtn = document.querySelector('input[value="Get"]');
+
+    if (selectItem.length === 0 || hasClicked) return;
+
+    const targetOption = selectItem.find(item => {
+      return item.textContent.trim() === 'beliani.dk';
+    });
+
+    if (targetOption) {
+      const findSelect = document.querySelector('select[name="shop_id"]');
+
+      if (!findSelect) return;
+
+      findSelect.value = targetOption.value;
+
+      findSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      console.log(`✅ Магазин "${targetOption.textContent}" выбран`);
+
+      // getBtn.click();
+    }
+  }, [selectItem, hasClicked]);
 
   const openModal = async () => {
     await Swal.fire({
@@ -73,11 +100,14 @@ export default function ButtonsBlock({ isShow, onClose }) {
     <>
       <div className={`buttonsBlock ${isShow ? 'active' : ''}`}>
         <CloseButton onClose={onClose} />
-        <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
+
+        {bannerURL === bannerDEV && (
+          <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
+        )}
+
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />
-
-          <LoadZipButton/>
+          <LoadZipButton />
         </div>
       </div>
     </>

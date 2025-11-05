@@ -2,6 +2,8 @@ import Swal from 'sweetalert2';
 import nyanCat from '../img/cat.gif';
 
 export const dev = 'https://prolodev.prologistics.info';
+export const bannerDEV = 'https://prolodev.prologistics.info/shop_banner.php';
+export const bannerPROD = 'https://prologistics.info/shop_banner.php';
 export const shopDev = 'https://www.dev.beliani.net/';
 export const shopProd = 'https://www.beliani.co.uk/';
 

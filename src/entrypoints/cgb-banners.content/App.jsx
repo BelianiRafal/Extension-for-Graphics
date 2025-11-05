@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import MainButtons from './MainButtons';
+
+export const URLContext = createContext(null);
 
 export default function App() {
   const [imageData, setImageData] = useState([]);
+  const [bannerURL, setBannerURL] = useState(null);
 
   useEffect(() => {
     let findImage = document.querySelectorAll('tr[id^="trcheckrow"] video[name="media"]');
@@ -20,9 +23,16 @@ export default function App() {
     setImageData([...findImage, ...parentElement]);
   }, []);
 
+  useEffect(() => {
+    const splittedUrl = window.location.href.split('?')[0];
+    setBannerURL(splittedUrl);
+  }, []);
+
   return (
     <>
-      <MainButtons data={imageData}/>
+      <URLContext.Provider value={bannerURL}>
+        <MainButtons data={imageData} />
+      </URLContext.Provider>
     </>
   );
 }
