@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react';
-import { convertToObject, getModal, dev, shopDev, shopProd, bannerDEV } from './assets/index.js';
+import {
+  convertToObject,
+  getModal,
+  dev,
+  shopDev,
+  shopProd,
+  bannerDEV,
+  SLUG_SHOP,
+  mainURL,
+  bannerPROD,
+} from './assets/index.js';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
 import LoadZipButton from './Components/LoadZipButton.jsx';
+import Input from './Components/Input.jsx';
 import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
@@ -12,8 +23,10 @@ import { URLContext } from './App.jsx';
 export default function ButtonsBlock({ isShow, onClose }) {
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, isOfferInput] = useState([]);
-  const [selectItem, setSelectItem] = useState([]);
-  const [hasClicked, setHasClicked] = useState(false);
+  const [data, setData] = useState([]);
+
+  const [activateDate, setActivateDate] = useState('');
+  const [deactivateDate, setDeactivateDate] = useState('');
 
   const bannerURL = useContext(URLContext);
 
@@ -23,40 +36,49 @@ export default function ButtonsBlock({ isShow, onClose }) {
   };
 
   useEffect(() => {
+    const defaultActivateDate = document.querySelectorAll('input[name="activate_from_date"][id="activate_from_date"]');
+    const defaultActivateTime = document.querySelectorAll('input[name="activate_from_time"][id="activate_from_time"]');
+
+    const defaultDeactivateDate = document.querySelectorAll(
+      'input[name="deactivate_from_date"][id="deactivate_from_date"]',
+    );
+    const defaultDeactivateTime = document.querySelectorAll(
+      'input[name="deactivate_from_time"][id="deactivate_from_time"]',
+    );
+
+    console.log(defaultActivateTime);
+
+    newValueInput(defaultActivateDate, activateDate);
+    newValueInput(defaultActivateTime, '00:00:00');
+    newValueInput(defaultDeactivateDate, deactivateDate);
+    newValueInput(defaultDeactivateTime, '23:59:59');
+
     const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
     isOfferInput(offertInputNode);
-  }, []);
+  }, [activateDate, deactivateDate,]);
 
   useEffect(() => {
-    const findSelect = document.querySelector('select[name="shop_id"]');
-    if (!findSelect) return;
-    const findSelectItems = Array.from(findSelect.children);
+    if (data.length === 0) return;
 
-    setSelectItem(findSelectItems);
-  }, []);
+    for (const item of data) {
+      const splitedName = item.name.split(`_desktop`)[0];
+      const language = SLUG_SHOP[splitedName];
 
-  useEffect(() => {
-    const getBtn = document.querySelector('input[value="Get"]');
+      const URL = `${mainURL}${language}`;
 
-    if (selectItem.length === 0 || hasClicked) return;
+      setTimeout(() => {
+        window.open(URL, '_blank');
 
-    const targetOption = selectItem.find(item => {
-      return item.textContent.trim() === 'beliani.dk';
-    });
-
-    if (targetOption) {
-      const findSelect = document.querySelector('select[name="shop_id"]');
-
-      if (!findSelect) return;
-
-      findSelect.value = targetOption.value;
-
-      findSelect.dispatchEvent(new Event('change', { bubbles: true }));
-      console.log(`✅ Магазин "${targetOption.textContent}" выбран`);
-
-      // getBtn.click();
+        if (addBanner) {
+          setTimeout(() => {
+            addBanner.click();
+          }, 1500);
+        }
+      }, 2000);
     }
-  }, [selectItem, hasClicked]);
+  }, [data]);
+
+  console.log(activateDate);
 
   const openModal = async () => {
     await Swal.fire({
@@ -95,15 +117,46 @@ export default function ButtonsBlock({ isShow, onClose }) {
       },
     });
   };
+  const newValueInput = (defaultInput, newValue) => {
+    defaultInput.forEach(el => {
+      const oldOnInput = el.oninput;
+      const oldOnChange = el.onchange;
+      el.oninput = null;
+      el.onchange = null;
+      el.value = newValue;
+
+      el.oninput = oldOnInput;
+      el.onchange = oldOnChange;
+
+      if (oldOnInput) oldOnInput.call(el, { target: el, currentTarget: el });
+      if (oldOnChange) oldOnChange.call(el, { target: el, currentTarget: el });
+
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  };
 
   return (
     <>
       <div className={`buttonsBlock ${isShow ? 'active' : ''}`}>
         <CloseButton onClose={onClose} />
+        <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
 
-        {bannerURL === bannerDEV && (
-          <ButtonsWrapper openModal={openModal} offertInput={offertInput} stateSlug={stateSlug} />
-        )}
+        <Input
+          changeDate={setActivateDate}
+          dateValue={(activateDate)}
+          changeText={() => {}}
+          textValue="00:00:00"
+          title="Activate time"
+        />
+
+        <Input
+          changeDate={setDeactivateDate}
+          dateValue={(deactivateDate)}
+          changeText={() => {}}
+          textValue="23:59:59"
+          title="Deactivate time"
+        />
 
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />

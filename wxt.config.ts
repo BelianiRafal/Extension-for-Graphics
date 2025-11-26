@@ -4,6 +4,9 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-react'],
+    manifest: {
+    permissions: ['tabs'],
+  },
   webExt: {
     openDevtools: true,
     disabled: true,

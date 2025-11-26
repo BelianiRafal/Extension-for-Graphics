@@ -2,8 +2,11 @@ import Swal from 'sweetalert2';
 import nyanCat from '../img/cat.gif';
 
 export const dev = 'https://prolodev.prologistics.info';
+export const prod = 'https://www.prologistics.info';
 export const bannerDEV = 'https://prolodev.prologistics.info/shop_banner.php';
-export const bannerPROD = 'https://prologistics.info/shop_banner.php';
+export const mainURL = 'https://prolodev.prologistics.info/shop_banners.php';
+export const mainURLprod = 'https://www.prologistics.info/shop_banners.php'
+export const bannerPROD = 'https://www.prologistics.info/shop_banner.php';
 export const shopDev = 'https://www.dev.beliani.net/';
 export const shopProd = 'https://www.beliani.co.uk/';
 
@@ -47,6 +50,29 @@ export const COUNTRY_CODE = {
   RO: 'romanian',
   BEN: '',
 };
+
+export const SLUG_SHOP = {
+  UK: '?shop_id=2',
+  PL: '?shop_id=12',
+  DACH: ['?shop_id=1', '?shop_id=3', '?shop_id=8'],
+  AT:'?shop_id=8',
+  DE: '?shop_id=3',
+  CH: '?shop_id=1',
+  NL: '?shop_id=17',
+  FR: '?shop_id=7',
+  ES: '?shop_id=10',
+  PT: '?shop_id=22',
+  IT: '?shop_id=21',
+  DK: '?shop_id=25',
+  NO: '?shop_id=28',
+  FI: '?shop_id=27',
+  SE: '?shop_id=23',
+  CZ: '?shop_id=26',
+  SK: '?shop_id=29',
+  HU: '?shop_id=24',
+  RO: '?shop_id=30',
+  BEN: '?shop_id=19',
+}
 
 export function convertToObject(CSV) {
   const [header, ...rows] = CSV;

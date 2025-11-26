@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import ButtonsBlock from './ButtonsBlock';
 import { URLContext } from './App';
-import { bannerDEV } from './assets/index';
+import { bannerDEV, bannerPROD } from './assets/index';
 
 import './styles/style.scss';
+import LoadForOne from './Components/LoadForOne';
 
 export default function Button(props) {
   const [isHidden, setIsHidden] = useState(false);
@@ -22,21 +23,23 @@ export default function Button(props) {
     setIsShow(!isShow);
   };
 
-
   return (
     <div className="mainButtons">
+      {bannerURL === bannerDEV || bannerURL === bannerPROD ? ( 
+        <>
+          <button onClick={hideFunction} className="showImageBtn">
+            {isHidden ? 'Show image' : 'Hide image'}
+          </button>
 
-      {bannerURL === bannerDEV && (
-        <button onClick={hideFunction} className="showImageBtn">
-          {isHidden ? 'Show image' : 'Hide image'}
-        </button>
-      )
-      }
-      <button onClick={showPanel} className={`openButton ${isShow ? 'hide' : ''}`}>
-        <span>Open CGB Button</span>
-      </button>
+          <button onClick={showPanel} className={`openButton ${isShow ? 'hide' : ''}`}>
+            <span>Open CGB Button</span>
+          </button>
 
-      <ButtonsBlock isShow={isShow} onClose={() => setIsShow(false)} />
+          <ButtonsBlock isShow={isShow} onClose={() => setIsShow(false)} />
+        </>
+      ) : (
+        <LoadForOne />
+      )}
     </div>
   );
 }
