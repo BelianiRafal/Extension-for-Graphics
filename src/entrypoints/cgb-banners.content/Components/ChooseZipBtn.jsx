@@ -1,5 +1,4 @@
-import { PulseLoader
- } from 'react-spinners';
+import { PulseLoader } from 'react-spinners';
 
 export default function ChooseZipBtn({ handleZipUpload, zipName, loading }) {
   return (

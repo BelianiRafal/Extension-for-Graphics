@@ -1,6 +1,7 @@
 @use './variables' as *;
 
 .main-cgb {
+  height: 100%;
   position: fixed;
   top: 20px;
   right: 20px;
@@ -492,7 +493,7 @@
     max-width: 130px;
     padding: 7px 20px;
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 5px;
     border: 1.5px solid lightgrey;
     outline: none;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
@@ -503,7 +504,7 @@
     }
 
     &:active {
-       transform: scale(0.85);
+      transform: scale(0.85);
     }
 
     &:focus {
@@ -516,3 +517,85 @@
   }
 }
 
+.color-picker {
+  &-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &-title {
+    text-align: center;
+    color: $main-color-text;
+  }
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+
+    input {
+      max-width: 200px;
+      border-radius: 5px;
+      padding: 7px 6px;
+      font-size: 12px;
+      margin-bottom: 10px;
+      border: none;
+
+      &:focus {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s linear;
+        outline: none;
+      }
+    }
+  }
+
+  &-text {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: red;
+  }
+}
+
+.scroll-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 50px;
+  z-index: 9999;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(rgb(227, 203, 255), rgba(252, 235, 252, 1));
+  box-shadow: 1px 1px 20px #750000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+
+  .arrow {
+    path {
+      fill: #000;
+    }
+  }
+
+  &:hover {
+    .arrow {
+      animation: slide-in-bottom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+  }
+}
+
+@keyframes slide-in-bottom {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

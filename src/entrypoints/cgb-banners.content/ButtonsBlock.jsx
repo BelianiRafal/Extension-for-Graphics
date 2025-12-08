@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react';
-import {
-  convertToObject,
-  getModal,
-  dev,
-  shopDev,
-  shopProd,
-  bannerDEV,
-  SLUG_SHOP,
-  mainURL,
-  bannerPROD,
-} from './assets/index.js';
+import { convertToObject, getModal, dev, shopDev, shopProd, SLUG_SHOP, mainURL } from './assets/index.js';
+import { URLContext } from './App.jsx';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
 import LoadZipButton from './Components/LoadZipButton.jsx';
@@ -17,16 +8,20 @@ import Input from './Components/Input.jsx';
 import Swal from 'sweetalert2';
 import Papa from 'papaparse';
 import logo from './img/logo.svg';
+import ColorPicker from './Components/ColorPicker/ColorPicker.jsx';
+
 import './styles/style.scss';
-import { URLContext } from './App.jsx';
 
 export default function ButtonsBlock({ isShow, onClose }) {
   const [stateSlug, setStateSlug] = useState([]);
-  const [offertInput, isOfferInput] = useState([]);
+  const [offertInput, setOfferInput] = useState([]);
   const [data, setData] = useState([]);
 
   const [activateDate, setActivateDate] = useState('');
   const [deactivateDate, setDeactivateDate] = useState('');
+
+  const [pickerDesktop, setPickerDesktop] = useState([]);
+  const [pickerMobile, setPickerMobile] = useState([]);
 
   const bannerURL = useContext(URLContext);
 
@@ -46,7 +41,10 @@ export default function ButtonsBlock({ isShow, onClose }) {
       'input[name="deactivate_from_time"][id="deactivate_from_time"]',
     );
 
-    console.log(defaultActivateTime);
+    if (defaultActivateDate[0].value !== '' || defaultDeactivateDate[0].value !== '') {
+      defaultActivateDate[0].placeholder = defaultActivateDate[0].value;
+      defaultDeactivateDate[0].placeholder = defaultDeactivateDate[0].value;
+    }
 
     newValueInput(defaultActivateDate, activateDate);
     newValueInput(defaultActivateTime, '00:00:00');
@@ -54,8 +52,8 @@ export default function ButtonsBlock({ isShow, onClose }) {
     newValueInput(defaultDeactivateTime, '23:59:59');
 
     const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
-    isOfferInput(offertInputNode);
-  }, [activateDate, deactivateDate,]);
+    setOfferInput(offertInputNode);
+  }, [activateDate, deactivateDate]);
 
   useEffect(() => {
     if (data.length === 0) return;
@@ -78,7 +76,35 @@ export default function ButtonsBlock({ isShow, onClose }) {
     }
   }, [data]);
 
-  console.log(activateDate);
+  useEffect(() => {
+    const findColorPickers = () => {
+      const defaultColorPicker = document.querySelectorAll('input.color-picker-for-type-color');
+
+      const desktopPicker = Array.from(defaultColorPicker).slice(2, 6);
+      const mobilePicker = Array.from(defaultColorPicker).slice(6, 10);
+
+      if (desktopPicker.length === 4 && mobilePicker.length === 4) {
+        setPickerDesktop(desktopPicker);
+        setPickerMobile(mobilePicker);
+
+        return true;
+      }
+      return false;
+    };
+
+    if (findColorPickers()) return;
+
+    const attempts = [100, 300, 500, 1000, 2000];
+    const timeouts = attempts.map(delay =>
+      setTimeout(() => {
+        findColorPickers();
+      }, delay),
+    );
+
+    return () => {
+      timeouts.forEach(timeout => clearTimeout(timeout));
+    };
+  }, []);
 
   const openModal = async () => {
     await Swal.fire({
@@ -119,17 +145,7 @@ export default function ButtonsBlock({ isShow, onClose }) {
   };
   const newValueInput = (defaultInput, newValue) => {
     defaultInput.forEach(el => {
-      const oldOnInput = el.oninput;
-      const oldOnChange = el.onchange;
-      el.oninput = null;
-      el.onchange = null;
       el.value = newValue;
-
-      el.oninput = oldOnInput;
-      el.onchange = oldOnChange;
-
-      if (oldOnInput) oldOnInput.call(el, { target: el, currentTarget: el });
-      if (oldOnChange) oldOnChange.call(el, { target: el, currentTarget: el });
 
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
@@ -144,7 +160,7 @@ export default function ButtonsBlock({ isShow, onClose }) {
 
         <Input
           changeDate={setActivateDate}
-          dateValue={(activateDate)}
+          dateValue={activateDate}
           changeText={() => {}}
           textValue="00:00:00"
           title="Activate time"
@@ -152,11 +168,14 @@ export default function ButtonsBlock({ isShow, onClose }) {
 
         <Input
           changeDate={setDeactivateDate}
-          dateValue={(deactivateDate)}
+          dateValue={deactivateDate}
           changeText={() => {}}
           textValue="23:59:59"
           title="Deactivate time"
         />
+
+        <ColorPicker pickerState={pickerDesktop} titleText={'Desktop color'} />
+        <ColorPicker pickerState={pickerMobile} titleText={'Mobile color'} />
 
         <div className="logo__wrapper">
           <img onClick={openShop} className="wrapper__logo" src={logo} alt="Beliani logo" />

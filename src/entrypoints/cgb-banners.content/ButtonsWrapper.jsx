@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Button from './Components/Button';
 import { langSlugDesktop } from './assets';
 import { getModal } from './assets';
+import Button from './Components/Button';
 import './styles/style.scss';
 
 export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
