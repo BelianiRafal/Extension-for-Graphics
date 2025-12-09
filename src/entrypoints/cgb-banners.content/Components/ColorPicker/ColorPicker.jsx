@@ -4,6 +4,13 @@ import { PulseLoader } from 'react-spinners';
 export default function ColorPicker({ pickerState, titleText }) {
   const [values, setValues] = useState([]);
 
+  const inputNames = {
+    0: 'Countdown text color',
+    1: 'Countdown first circle',
+    2: 'Countdown second circle',
+    3: 'Countdown overlay',
+  }
+
   useEffect(() => {
     const initializeInputs = () => {
       if (pickerState.length === 4) {
@@ -57,6 +64,7 @@ export default function ColorPicker({ pickerState, titleText }) {
       <div className="color-picker-container">
         {values.map((val, i) => (
           <div key={i} className="color-picker-item">
+            <p className='color-picker-name'>{inputNames[i]}</p>
             <input
               type="color-picker-input"
               value={val}
