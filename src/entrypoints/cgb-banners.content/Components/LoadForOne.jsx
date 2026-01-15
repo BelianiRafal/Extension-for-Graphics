@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getModal, SLUG_SHOP, SLUG_LANGUAGES, mainURL, dev, prod, mainURLprod } from '../assets';
+import { getModal, SLUG_SHOP, mainURL, dev, prod, mainURLprod } from '../assets';
 import JSZip from 'jszip';
 
-export default function LoadForOne({ selectedLanguages = [] }) {
+export default function LoadForOne() {
   const [files, setFiles] = useState([]);
   const [zipName, setZipName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,7 @@ export default function LoadForOne({ selectedLanguages = [] }) {
             filesBySlug[slug] = {};
           }
 
+          // Конвертируем File в base64
           const reader = new FileReader();
           const base64 = await new Promise(resolve => {
             reader.onload = e => resolve(e.target.result);
@@ -67,7 +68,6 @@ export default function LoadForOne({ selectedLanguages = [] }) {
       }
 
       const processData = [];
-      const missingLanguages = [];
 
       for (const slug of Object.keys(filesBySlug)) {
         const shopIds = SLUG_SHOP[slug];
@@ -75,33 +75,6 @@ export default function LoadForOne({ selectedLanguages = [] }) {
         if (!shopIds) {
           console.warn(`Shop ID not found for: ${slug}`);
           continue;
-        }
-
-        const requiredLanguages = SLUG_LANGUAGES[slug] || [];
-        
-        // Отладка
-        console.log(`Checking ${slug}:`);
-        console.log('Required languages:', requiredLanguages);
-        console.log('Selected languages:', selectedLanguages);
-
-        const uncheckedLanguages = requiredLanguages.filter(lang => {
-          if (!lang) return false;
-          
-          // Проверяем есть ли язык в выбранных (регистронезависимо)
-          const isSelected = selectedLanguages.some(
-            selected => selected.toLowerCase() === lang.toLowerCase()
-          );
-          
-          console.log(`Language ${lang}: ${isSelected ? 'found' : 'NOT FOUND'}`);
-          
-          return !isSelected;
-        });
-
-        if (uncheckedLanguages.length > 0) {
-          missingLanguages.push({
-            slug,
-            languages: uncheckedLanguages,
-          });
         }
 
         if (Array.isArray(shopIds)) {
@@ -123,14 +96,7 @@ export default function LoadForOne({ selectedLanguages = [] }) {
         }
       }
 
-      if (missingLanguages.length > 0) {
-        const errorMessage = missingLanguages
-          .map(item => `<strong>${item.slug}</strong>: ${item.languages.join(', ')}`)
-          .join('<br>');
-
-        getModal('error', `Please check the following languages:<br><br>${errorMessage}<br><br>and load zip again.`);
-        return;
-      }
+      console.log(window.location.href);
 
       if (processData.length === 0) {
         getModal('error', 'No valid files found in ZIP');
@@ -152,7 +118,7 @@ export default function LoadForOne({ selectedLanguages = [] }) {
     };
 
     processFiles();
-  }, [files, selectedLanguages]);
+  }, [files]);
 
   return (
     <div className="load-for-one">
