@@ -74,6 +74,29 @@ export const SLUG_SHOP = {
   BEN: '?shop_id=19',
 }
 
+export const SLUG_LANGUAGES = {
+  UK: ['english', 'polish'],
+  PL: ['polish'],
+  DACH: ['german', 'germanDE', 'english'],
+  AT: ['germanDE', 'english'],
+  DE: ['germanDE', 'english'],
+  CH: ['german', 'english'],
+  NL: ['dutch', 'english', 'french'],
+  FR: ['french'],
+  ES: ['spanish', 'english'],
+  PT: ['portugal', 'english'],
+  IT: ['italian', 'english'],
+  DK: ['danish', 'english'],
+  NO: ['norsk', 'english'],
+  FI: ['finnish', 'english', 'swedish'],
+  SE: ['swedish', 'english'],
+  CZ: ['czech', 'english', 'slovar'],
+  SK: ['slovak', 'english', 'czech'],
+  HU: ['Hungarian', 'english'],
+  RO: ['romanian'],
+  BEN: ['dutch', 'french', 'english'],
+}
+
 export function convertToObject(CSV) {
   const [header, ...rows] = CSV;
   const slugIndex = header.indexOf('slug');
