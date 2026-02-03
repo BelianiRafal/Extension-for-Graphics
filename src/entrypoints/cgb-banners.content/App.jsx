@@ -6,6 +6,7 @@ export const URLContext = createContext(null);
 export default function App() {
   const [imageData, setImageData] = useState([]);
   const [bannerURL, setBannerURL] = useState(null);
+  const [onlyMedia, setOnlyMedia] = useState([]);
 
   useEffect(() => {
     let findImage = document.querySelectorAll('tr[id^="trcheckrow"] video[name="media"]');
@@ -21,6 +22,7 @@ export default function App() {
     });
 
     setImageData([...findImage, ...parentElement]);
+    setOnlyMedia(findImage);
   }, []);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function App() {
   return (
     <>
       <URLContext.Provider value={bannerURL}>
-        <MainButtons data={imageData} />
+        <MainButtons data={imageData} media={onlyMedia} />
       </URLContext.Provider>
     </>
   );

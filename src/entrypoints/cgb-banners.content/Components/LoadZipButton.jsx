@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { checkedDeviceType } from '../assets';
+import { checkedDeviceType, filledCashback, COUNTRY_CASHBACK, COUNTRY_CODE } from '../assets';
 import { getModal } from '../assets';
 import ChooseZipBtn from './ChooseZipBtn';
 import JSZip from 'jszip';
@@ -55,30 +55,28 @@ export default function LoadZipButton() {
 
   useEffect(() => {
     if (files.length === 0) return;
-
-    // changeData(files);
-  }, [files]);
-
-  useEffect(() => {
-    if (files.length === 0) return;
     setLoading(true);
 
     const sortedForDesktopOrMobile = () => {
       try {
         for (const item of files) {
-          if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
-            getModal('error', 'The file name must be in the format Slug_Desktop/Mobile');
-            return;
-          }
+          // const fileKey = item.name
+          //   .replace(/\.[^/.]+$/, '')
+          //   .trim()
+          //   .toUpperCase();
 
-          checkedDeviceType(item, 'desktop', desktopFiles);
-          checkedDeviceType(item, 'mobile', mobileFiles);
+          if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
+            filledCashback(item, desktopFiles);
+          } else {
+            checkedDeviceType(item, 'desktop', desktopFiles);
+            checkedDeviceType(item, 'mobile', mobileFiles);
+          }
         }
 
         getModal('nyan', 'Files added to inputs!');
       } catch (e) {
         console.log(e);
-        getModal('error', 'Something went wrong');
+        getModal('cryMen', 'Something went wrong');
       } finally {
         setLoading(false);
       }

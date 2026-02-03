@@ -52,7 +52,6 @@ export default function LoadForOne() {
             filesBySlug[slug] = {};
           }
 
-          // Конвертируем File в base64
           const reader = new FileReader();
           const base64 = await new Promise(resolve => {
             reader.onload = e => resolve(e.target.result);
@@ -95,8 +94,6 @@ export default function LoadForOne() {
           });
         }
       }
-
-      console.log(window.location.href);
 
       if (processData.length === 0) {
         getModal('error', 'No valid files found in ZIP');

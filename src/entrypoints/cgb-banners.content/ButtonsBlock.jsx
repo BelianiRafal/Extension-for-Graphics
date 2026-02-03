@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { convertToObject, getModal, dev, shopDev, shopProd, SLUG_SHOP, mainURL } from './assets/index.js';
-import { URLContext } from './App.jsx';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
 import LoadZipButton from './Components/LoadZipButton.jsx';
@@ -12,7 +11,7 @@ import ColorPicker from './Components/ColorPicker/ColorPicker.jsx';
 
 import './styles/style.scss';
 
-export default function ButtonsBlock({ isShow, onClose }) {
+export default function ButtonsBlock({ isShow, onClose, imgData }) {
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, setOfferInput] = useState([]);
   const [data, setData] = useState([]);
@@ -22,8 +21,6 @@ export default function ButtonsBlock({ isShow, onClose }) {
 
   const [pickerDesktop, setPickerDesktop] = useState([]);
   const [pickerMobile, setPickerMobile] = useState([]);
-
-  const bannerURL = useContext(URLContext);
 
   const openShop = () => {
     const goToLink = window.location.origin === dev ? shopDev : shopProd;
@@ -47,9 +44,11 @@ export default function ButtonsBlock({ isShow, onClose }) {
     }
 
     newValueInput(defaultActivateDate, activateDate);
-    newValueInput(defaultActivateTime, '00:00:00');
+    newValueInput(defaultActivateTime, imgData.length < 5 ? '01:00:00' :'00:00:00');
     newValueInput(defaultDeactivateDate, deactivateDate);
-    newValueInput(defaultDeactivateTime, '23:59:59');
+    newValueInput(defaultDeactivateTime, imgData.length < 5 ? '00:59:00' :'23:59:59');
+
+    console.log(imgData);
 
     const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
     setOfferInput(offertInputNode);
@@ -162,7 +161,7 @@ export default function ButtonsBlock({ isShow, onClose }) {
           changeDate={setActivateDate}
           dateValue={activateDate}
           changeText={() => {}}
-          textValue="00:00:00"
+          textValue={imgData.length < 5 ? '01:00:00' :'00:00:00'}
           title="Activate time"
         />
 
@@ -170,7 +169,7 @@ export default function ButtonsBlock({ isShow, onClose }) {
           changeDate={setDeactivateDate}
           dateValue={deactivateDate}
           changeText={() => {}}
-          textValue="23:59:59"
+          textValue={imgData.length < 5 ? '00:59:00' :'23:59:59'}
           title="Deactivate time"
         />
 
