@@ -41,49 +41,48 @@ export default function LoadForOne() {
 
     const processFiles = async () => {
       const filesBySlug = {};
-      
+
       for (const file of files) {
         const match = file.name.match(/^([A-Z]{2,4})_(desktop|mobile)/i);
         if (match) {
           const slug = match[1].toUpperCase();
           const deviceType = match[2].toLowerCase();
-          
+
           if (!filesBySlug[slug]) {
             filesBySlug[slug] = {};
           }
-          
-          // Конвертируем File в base64
+
           const reader = new FileReader();
-          const base64 = await new Promise((resolve) => {
-            reader.onload = (e) => resolve(e.target.result);
+          const base64 = await new Promise(resolve => {
+            reader.onload = e => resolve(e.target.result);
             reader.readAsDataURL(file);
           });
-          
+
           filesBySlug[slug][deviceType] = {
             name: file.name,
             type: file.type,
-            base64: base64
+            base64: base64,
           };
         }
       }
 
       const processData = [];
-      
+
       for (const slug of Object.keys(filesBySlug)) {
         const shopIds = SLUG_SHOP[slug];
-        
+
         if (!shopIds) {
           console.warn(`Shop ID not found for: ${slug}`);
           continue;
         }
-        
+
         if (Array.isArray(shopIds)) {
           shopIds.forEach(shopId => {
             processData.push({
               name: `${slug}_${shopId}`,
               url: window.location.origin === dev ? `${mainURL}${shopId}` : `${mainURLprod}${shopId}`,
               language: shopId,
-              files: filesBySlug[slug]
+              files: filesBySlug[slug],
             });
           });
         } else {
@@ -91,27 +90,28 @@ export default function LoadForOne() {
             name: slug,
             url: window.location.origin === dev ? `${mainURL}${shopIds}` : `${mainURLprod}${shopIds}`,
             language: shopIds,
-            files: filesBySlug[slug]
+            files: filesBySlug[slug],
           });
         }
       }
-
-      console.log(window.location.href);
 
       if (processData.length === 0) {
         getModal('error', 'No valid files found in ZIP');
         return;
       }
 
-      chrome.runtime.sendMessage({ 
-        action: "processTabsSequentially",
-        data: processData
-      }, (response) => {
-        if (response?.status === "started") {
-          console.log(`Started processing ${processData.length} tabs`);
-          getModal('success', `Processing ${processData.length} banners...`);
-        }
-      });
+      chrome.runtime.sendMessage(
+        {
+          action: 'processTabsSequentially',
+          data: processData,
+        },
+        response => {
+          if (response?.status === 'started') {
+            console.log(`Started processing ${processData.length} tabs`);
+            getModal('success', `Processing ${processData.length} banners...`);
+          }
+        },
+      );
     };
 
     processFiles();
@@ -120,12 +120,7 @@ export default function LoadForOne() {
   return (
     <div className="load-for-one">
       <label className="Documents-btn">
-        <input 
-          type="file" 
-          accept=".zip,.rar,.7z" 
-          style={{ display: 'none' }} 
-          onChange={handleZipUpload} 
-        />
+        <input type="file" accept=".zip,.rar,.7z" style={{ display: 'none' }} onChange={handleZipUpload} />
         <span className="folderContainer">
           <svg
             className="fileBack"
@@ -196,7 +191,7 @@ export default function LoadForOne() {
             </defs>
           </svg>
         </span>
-        <p className="text">{loading ? 'Loading...' : (zipName ? zipName : 'Load ZIP')}</p>
+        <p className="text">{loading ? 'Loading...' : zipName ? zipName : 'Load ZIP'}</p>
       </label>
     </div>
   );

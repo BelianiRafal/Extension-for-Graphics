@@ -10,7 +10,7 @@ export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
   const fulfillFunc = () => {
     setLoading('fulfill');
     if (stateSlug.length === 0) {
-      getModal('error', 'Please provide context!');
+      getModal('cryMen', 'Please provide context!');
       setLoading(null);
       return;
     }

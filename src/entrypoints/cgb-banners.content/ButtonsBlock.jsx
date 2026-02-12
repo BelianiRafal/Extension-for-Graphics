@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { convertToObject, getModal, dev, shopDev, shopProd, SLUG_SHOP, mainURL } from './assets/index.js';
-import { URLContext } from './App.jsx';
 import ButtonsWrapper from './ButtonsWrapper.jsx';
 import CloseButton from './Components/CloseButton.jsx';
 import LoadZipButton from './Components/LoadZipButton.jsx';
@@ -12,7 +11,7 @@ import ColorPicker from './Components/ColorPicker/ColorPicker.jsx';
 
 import './styles/style.scss';
 
-export default function ButtonsBlock({ isShow, onClose }) {
+export default function ButtonsBlock({ isShow, onClose, imgData }) {
   const [stateSlug, setStateSlug] = useState([]);
   const [offertInput, setOfferInput] = useState([]);
   const [data, setData] = useState([]);
@@ -23,7 +22,7 @@ export default function ButtonsBlock({ isShow, onClose }) {
   const [pickerDesktop, setPickerDesktop] = useState([]);
   const [pickerMobile, setPickerMobile] = useState([]);
 
-  const bannerURL = useContext(URLContext);
+  const [countDate, setCountDate] = useState('');
 
   const openShop = () => {
     const goToLink = window.location.origin === dev ? shopDev : shopProd;
@@ -41,19 +40,27 @@ export default function ButtonsBlock({ isShow, onClose }) {
       'input[name="deactivate_from_time"][id="deactivate_from_time"]',
     );
 
-    if (defaultActivateDate[0].value !== '' || defaultDeactivateDate[0].value !== '') {
+    const countDownElementDate = document.querySelectorAll('input[name="countdown_till_date"][id="countdown_till_date"]');
+    const countDownElementTime = document.querySelectorAll('input[name="countdown_till_time"][id="countdown_till_time"]');
+
+    if (defaultActivateDate[0].value !== '' || defaultDeactivateDate[0].value !== '' || countDownElementDate !== '') {
       defaultActivateDate[0].placeholder = defaultActivateDate[0].value;
       defaultDeactivateDate[0].placeholder = defaultDeactivateDate[0].value;
+      countDownElementDate[0].placeholder = countDownElementDate[0].value;
     }
 
     newValueInput(defaultActivateDate, activateDate);
-    newValueInput(defaultActivateTime, '00:00:00');
+    newValueInput(defaultActivateTime, '01:00:00');
+
     newValueInput(defaultDeactivateDate, deactivateDate);
-    newValueInput(defaultDeactivateTime, '23:59:59');
+    newValueInput(defaultDeactivateTime, '00:59:00');
+
+    newValueInput(countDownElementDate, countDate);
+    newValueInput(countDownElementTime, '23:59:00');
 
     const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
     setOfferInput(offertInputNode);
-  }, [activateDate, deactivateDate]);
+  }, [activateDate, deactivateDate, countDate]);
 
   useEffect(() => {
     if (data.length === 0) return;
@@ -161,17 +168,22 @@ export default function ButtonsBlock({ isShow, onClose }) {
         <Input
           changeDate={setActivateDate}
           dateValue={activateDate}
-          changeText={() => {}}
-          textValue="00:00:00"
+          textValue='01:00:00'
           title="Activate time"
         />
 
         <Input
           changeDate={setDeactivateDate}
           dateValue={deactivateDate}
-          changeText={() => {}}
-          textValue="23:59:59"
+          textValue='00:59:00'
           title="Deactivate time"
+        />
+
+        <Input
+          changeDate={setCountDate}
+          dateValue={countDate}
+          textValue='23:59:59'
+          title='Countdown time'
         />
 
         <ColorPicker pickerState={pickerDesktop} titleText={'Desktop color'} />

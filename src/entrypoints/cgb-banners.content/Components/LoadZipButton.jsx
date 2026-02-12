@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { checkedDeviceType } from '../assets';
+import { checkedDeviceType, filledCashback, COUNTRY_CASHBACK, COUNTRY_CODE, getCurrentShop } from '../assets';
 import { getModal } from '../assets';
 import ChooseZipBtn from './ChooseZipBtn';
 import JSZip from 'jszip';
@@ -7,6 +7,7 @@ import JSZip from 'jszip';
 export default function LoadZipButton() {
   const [files, setFiles] = useState([]);
   const [mobileFiles, setMobilesFiles] = useState(null);
+  const [cashbackMobile, setCashbackMobile] = useState(null);
   const [desktopFiles, setDesktopFiles] = useState(null);
   const [zipName, setZipName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,11 @@ export default function LoadZipButton() {
     const input = form.querySelectorAll('input[type="file"][name^=pic][size="30"]');
     const mobile_input = form.querySelectorAll('input[type="file"][name^=mobile_pic][size="30"]');
 
+    const cashbackMobile = Array.from(mobile_input);
+    const half = cashbackMobile.length / 2;
+    const secondHalf = Array.from(cashbackMobile.slice(half));
+
+    setCashbackMobile(secondHalf);
     setDesktopFiles(Array.from(input));
 
     mobile_input.forEach((item, index) => {
@@ -53,43 +59,40 @@ export default function LoadZipButton() {
     }
   };
 
-  useEffect(() => {
-    if (files.length === 0) return;
+useEffect(() => {
+  if (files.length === 0) return;
+  setLoading(true);
 
-    // changeData(files);
-  }, [files]);
-
-  useEffect(() => {
-    if (files.length === 0) return;
-    setLoading(true);
-
-    const sortedForDesktopOrMobile = () => {
-      try {
-        for (const item of files) {
-          if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
-            getModal('error', 'The file name must be in the format Slug_Desktop/Mobile');
-            return;
-          }
-
+  const sortedForDesktopOrMobile = () => {
+    try {
+      const currentShop = getCurrentShop();
+      
+      for (const item of files) {
+        if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
+          filledCashback(item, desktopFiles, currentShop);
+          filledCashback(item, cashbackMobile, currentShop);
+        } else {
           checkedDeviceType(item, 'desktop', desktopFiles);
           checkedDeviceType(item, 'mobile', mobileFiles);
         }
-
-        getModal('nyan', 'Files added to inputs!');
-      } catch (e) {
-        console.log(e);
-        getModal('error', 'Something went wrong');
-      } finally {
-        setLoading(false);
       }
-    };
 
-    const timer = setTimeout(() => {
-      sortedForDesktopOrMobile();
-    }, 2000);
+      getModal('nyan', 'Files added to inputs!');
+    } catch (e) {
+      console.log(e);
+      getModal('cryMen', 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, [files]);
+  const timer = setTimeout(() => {
+    sortedForDesktopOrMobile();
+  }, 2000);
+
+  return () => clearTimeout(timer);
+}, [files]);
+
 
   return (
     <div className="zip__wrapper">
