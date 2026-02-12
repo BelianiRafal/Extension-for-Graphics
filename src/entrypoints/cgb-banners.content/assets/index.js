@@ -29,6 +29,8 @@ export const langSlugDesktop = {
   'offer_text[slovak]': 'sk',
   'offer_text[spanish]': 'es',
   'offer_text[swedish]': 'se',
+
+  //! Paste for context function shop ---> HR, SI
 };
 
 export const COUNTRY_CODE = {
@@ -50,6 +52,8 @@ export const COUNTRY_CODE = {
   HU: 'Hungarian',
   RO: 'romanian',
   BEN: '',
+
+  //! Paste for Center banner shop ---> HR, SI
 };
 
 export const COUNTRY_CASHBACK = {
@@ -100,6 +104,8 @@ export const COUNTRY_CASHBACK = {
   'BE-EN': 'english',
   'BE-FR': 'french',
   'BE-NL': 'dutch',
+
+  //! Paste for cashback banner shop ---> HR, SI
 };
 
 export const SLUG_SHOP = {
@@ -122,6 +128,8 @@ export const SLUG_SHOP = {
   SK: '?shop_id=29',
   HU: '?shop_id=24',
   RO: '?shop_id=30',
+  HR: '?shop_id=33',
+  SI: '?shop_id=34',
   BEN: '?shop_id=19',
 };
 
@@ -218,6 +226,8 @@ export const getCurrentShop = () => {
     24: 'HU',
     30: 'RO',
     19: 'BE',
+    33: 'HR',
+    34: 'SI',
   };
 
   const params = new URLSearchParams(window.location.search);
@@ -247,7 +257,7 @@ export const checkedDeviceType = (item, device, btnArray) => {
   }
 };
 
-export const filledCashback = (item, btnArray) => {
+export const filledCashback = (item, btnArray, currentShop) => {
   const fileKey = item.name
     .replace(/\.[^/.]+$/, '')
     .trim()
@@ -258,6 +268,15 @@ export const filledCashback = (item, btnArray) => {
   if (!language) {
     console.log('No language mapping for:', fileKey);
     return;
+  }
+
+
+  if (language === 'english') {
+    const shopPrefix = fileKey.split('-EN')[0];
+    
+    if (shopPrefix !== currentShop && fileKey.includes('-EN')) {
+      return;
+    }
   }
 
   const languages = Array.isArray(language) ? language : [language];

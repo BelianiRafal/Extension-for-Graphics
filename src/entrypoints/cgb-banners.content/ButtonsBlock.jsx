@@ -22,6 +22,8 @@ export default function ButtonsBlock({ isShow, onClose, imgData }) {
   const [pickerDesktop, setPickerDesktop] = useState([]);
   const [pickerMobile, setPickerMobile] = useState([]);
 
+  const [countDate, setCountDate] = useState('');
+
   const openShop = () => {
     const goToLink = window.location.origin === dev ? shopDev : shopProd;
     window.open(goToLink, '_blank');
@@ -38,21 +40,27 @@ export default function ButtonsBlock({ isShow, onClose, imgData }) {
       'input[name="deactivate_from_time"][id="deactivate_from_time"]',
     );
 
-    if (defaultActivateDate[0].value !== '' || defaultDeactivateDate[0].value !== '') {
+    const countDownElementDate = document.querySelectorAll('input[name="countdown_till_date"][id="countdown_till_date"]');
+    const countDownElementTime = document.querySelectorAll('input[name="countdown_till_time"][id="countdown_till_time"]');
+
+    if (defaultActivateDate[0].value !== '' || defaultDeactivateDate[0].value !== '' || countDownElementDate !== '') {
       defaultActivateDate[0].placeholder = defaultActivateDate[0].value;
       defaultDeactivateDate[0].placeholder = defaultDeactivateDate[0].value;
+      countDownElementDate[0].placeholder = countDownElementDate[0].value;
     }
 
     newValueInput(defaultActivateDate, activateDate);
-    newValueInput(defaultActivateTime, imgData.length < 5 ? '01:00:00' :'00:00:00');
-    newValueInput(defaultDeactivateDate, deactivateDate);
-    newValueInput(defaultDeactivateTime, imgData.length < 5 ? '00:59:00' :'23:59:59');
+    newValueInput(defaultActivateTime, '01:00:00');
 
-    console.log(imgData);
+    newValueInput(defaultDeactivateDate, deactivateDate);
+    newValueInput(defaultDeactivateTime, '00:59:00');
+
+    newValueInput(countDownElementDate, countDate);
+    newValueInput(countDownElementTime, '23:59:00');
 
     const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
     setOfferInput(offertInputNode);
-  }, [activateDate, deactivateDate]);
+  }, [activateDate, deactivateDate, countDate]);
 
   useEffect(() => {
     if (data.length === 0) return;
@@ -160,17 +168,22 @@ export default function ButtonsBlock({ isShow, onClose, imgData }) {
         <Input
           changeDate={setActivateDate}
           dateValue={activateDate}
-          changeText={() => {}}
-          textValue={imgData.length < 5 ? '01:00:00' :'00:00:00'}
+          textValue='01:00:00'
           title="Activate time"
         />
 
         <Input
           changeDate={setDeactivateDate}
           dateValue={deactivateDate}
-          changeText={() => {}}
-          textValue={imgData.length < 5 ? '00:59:00' :'23:59:59'}
+          textValue='00:59:00'
           title="Deactivate time"
+        />
+
+        <Input
+          changeDate={setCountDate}
+          dateValue={countDate}
+          textValue='23:59:59'
+          title='Countdown time'
         />
 
         <ColorPicker pickerState={pickerDesktop} titleText={'Desktop color'} />
