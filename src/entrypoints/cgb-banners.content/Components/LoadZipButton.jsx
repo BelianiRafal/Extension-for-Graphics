@@ -68,7 +68,9 @@ useEffect(() => {
       const currentShop = getCurrentShop();
       
       for (const item of files) {
-        if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
+        console.log('item for cashback', item.name, item.name.includes('desktop'), item.name.includes('mobile'));
+        
+        if (item.name.includes('desktop') || item.name.includes('mobile')) {
           filledCashback(item, desktopFiles, currentShop);
           filledCashback(item, cashbackMobile, currentShop);
         } else {

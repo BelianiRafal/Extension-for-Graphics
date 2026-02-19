@@ -60,48 +60,48 @@ export const COUNTRY_CASHBACK = {
   'UK-PL': 'polish',
   UK: 'english',
   'SK-HU': 'Hungarian',
-  'SK-EN': 'english',
+  'SK-UK': 'english',
   'SK-CZ': 'czech',
   SK: 'slovak',
   SE: 'swedish',
-  'SE-EN': 'english',
+  'SE-UK': 'english',
   RO: 'romanian',
-  'RO-EN': 'english',
+  'RO-UK': 'english',
   PT: 'portugal',
-  'PT-EN': 'english',
+  'PT-UK': 'english',
   PL: 'polish',
-  'PL-EN': 'english',
+  'PL-UK': 'english',
   NO: 'norsk',
-  'NO-EN': 'english',
+  'NO-UK': 'english',
   'NL-FR': 'french',
-  'NL-EN': 'english',
+  'NL-UK': 'english',
   NL: 'dutch',
   IT: 'italian',
-  'IT-EN': 'english',
+  'IT-UK': 'english',
   HU: 'Hungarian',
-  'HU-EN': 'english',
+  'HU-UK': 'english',
   FR: 'french',
   'FR-NL': 'dutch',
   'FR-DE': 'germanDE',
-  'FR-EN': 'english',
+  'FR-UK': 'english',
   FI: 'finnish',
-  'FI-EN': 'english',
+  'FI-UK': 'english',
   'FI-SE': 'swedish',
   ES: 'spanish',
-  'ES-EN': 'english',
+  'ES-UK': 'english',
   DK: 'danish',
-  'DK-EN': 'english',
+  'DK-UK': 'english',
   'DE-AT': 'germanDE',
-  'DE-AT-EN': 'english',
+  'DE-AT-UK': 'english',
   CZ: 'czech',
-  'CZ-EN': 'english',
+  'CZ-UK': 'english',
   'CZ-SK': 'slovak',
   CH: '',
-  'CH-EN': 'english',
+  'CH-UK': 'english',
   'CH-FR': 'french',
   'CH-IT': 'italian',
   'BE-DE': 'germanDE',
-  'BE-EN': 'english',
+  'BE-UK': 'english',
   'BE-FR': 'french',
   'BE-NL': 'dutch',
 
@@ -258,23 +258,32 @@ export const checkedDeviceType = (item, device, btnArray) => {
 };
 
 export const filledCashback = (item, btnArray, currentShop) => {
+  console.log('filledCashback', item, btnArray, currentShop);
   const fileKey = item.name
     .replace(/\.[^/.]+$/, '')
     .trim()
     .toUpperCase();
 
-  const language = COUNTRY_CASHBACK[fileKey];
+  const fileKeyParts = fileKey.split('_');
+  const slugParts = fileKeyParts.filter(part => isNaN(part) && part !== 'DESKTOP' && part !== 'MOBILE');
+  const updatedFileKey = slugParts.join('-');
+
+    console.log('fileKey', fileKey, 'fileKeyParts', fileKeyParts, 'updatedFileKey', updatedFileKey);
+
+  const language = COUNTRY_CASHBACK[updatedFileKey];
 
   if (!language) {
-    console.log('No language mapping for:', fileKey);
+    console.log('No language mapping for:', updatedFileKey);
     return;
   }
 
 
   if (language === 'english') {
-    const shopPrefix = fileKey.split('-EN')[0];
+    const shopPrefix = updatedFileKey.split('-UK')[0];
+    console.log('const shopPrefix = updatedFileKey.split', shopPrefix)
+    console.log('shopPrefix !== currentShop && updatedFileKey.includes("-UK")', shopPrefix !== currentShop, updatedFileKey.includes('-UK'))
     
-    if (shopPrefix !== currentShop && fileKey.includes('-EN')) {
+    if (shopPrefix !== currentShop && updatedFileKey.includes('-UK')) {
       return;
     }
   }
