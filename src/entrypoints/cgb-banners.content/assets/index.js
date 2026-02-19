@@ -238,6 +238,7 @@ export const getCurrentShop = () => {
 
 export const checkedDeviceType = (item, device, btnArray) => {
   if (item.name.includes(device)) {
+    console.log('checkedDeviceType', item.name, device, btnArray);
     const splitedName = item.name.split(`_${device}`)[0];
     const language = COUNTRY_CODE[splitedName];
     const languages = Array.isArray(language) ? language : [language];
@@ -262,7 +263,7 @@ export const filledCashback = (item, btnArray, currentShop) => {
     pic: 'DESKTOP',
     mobile_pic: 'MOBILE',
   }
-  console.log('filledCashback', item, btnArray, currentShop);
+
   const fileKey = item.name
     .replace(/\.[^/.]+$/, '')
     .trim()
@@ -274,8 +275,6 @@ export const filledCashback = (item, btnArray, currentShop) => {
   const deviceType = fileKeyParts.find(part => part === 'DESKTOP' || part === 'MOBILE');
   const updatedFileKey = slugParts.join('-');
 
-    console.log('fileKey', fileKey, 'fileKeyParts', fileKeyParts, 'updatedFileKey', updatedFileKey);
-
   const language = COUNTRY_CASHBACK[updatedFileKey];
 
   if (!language) {
@@ -286,8 +285,6 @@ export const filledCashback = (item, btnArray, currentShop) => {
 
   if (language === 'english') {
     const shopPrefix = updatedFileKey.split('-UK')[0];
-    console.log('const shopPrefix = updatedFileKey.split', shopPrefix)
-    console.log('shopPrefix !== currentShop && updatedFileKey.includes("-UK")', shopPrefix !== currentShop, updatedFileKey.includes('-UK'))
     
     if (shopPrefix !== currentShop && updatedFileKey.includes('-UK')) {
       return;
