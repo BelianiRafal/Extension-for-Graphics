@@ -96,7 +96,7 @@ export const COUNTRY_CASHBACK = {
   CZ: 'czech',
   'CZ-UK': 'english',
   'CZ-SK': 'slovak',
-  CH: '',
+  CH: 'german',
   'CH-UK': 'english',
   'CH-FR': 'french',
   'CH-IT': 'italian',
@@ -258,6 +258,10 @@ export const checkedDeviceType = (item, device, btnArray) => {
 };
 
 export const filledCashback = (item, btnArray, currentShop) => {
+  const devices = {
+    pic: 'DESKTOP',
+    mobile_pic: 'MOBILE',
+  }
   console.log('filledCashback', item, btnArray, currentShop);
   const fileKey = item.name
     .replace(/\.[^/.]+$/, '')
@@ -266,6 +270,8 @@ export const filledCashback = (item, btnArray, currentShop) => {
 
   const fileKeyParts = fileKey.split('_');
   const slugParts = fileKeyParts.filter(part => isNaN(part) && part !== 'DESKTOP' && part !== 'MOBILE');
+  const fileSlug = slugParts[0]
+  const deviceType = fileKeyParts.find(part => part === 'DESKTOP' || part === 'MOBILE');
   const updatedFileKey = slugParts.join('-');
 
     console.log('fileKey', fileKey, 'fileKeyParts', fileKeyParts, 'updatedFileKey', updatedFileKey);
@@ -293,7 +299,11 @@ export const filledCashback = (item, btnArray, currentShop) => {
   languages.forEach(lang => {
     const input = btnArray.find(btn => {
       const btnLanguage = btn.name.match(/\[(.*?)\]/)?.[1];
-      return btnLanguage === lang;
+      const btnType = btn.name.split('[')[0].trim().toLowerCase();
+      const btnDeviceType = devices[btnType];
+      if (!btnLanguage || !btnDeviceType) return false;
+
+      return btnLanguage === lang && btnDeviceType === deviceType && currentShop === fileSlug;
     });
 
     if (input) {
