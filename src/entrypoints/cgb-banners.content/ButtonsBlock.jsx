@@ -29,38 +29,101 @@ export default function ButtonsBlock({ isShow, onClose, imgData }) {
     window.open(goToLink, '_blank');
   };
 
-  useEffect(() => {
-    const defaultActivateDate = document.querySelectorAll('input[name="activate_from_date"][id="activate_from_date"]');
-    const defaultActivateTime = document.querySelectorAll('input[name="activate_from_time"][id="activate_from_time"]');
+  // ────────────────────────────────────────────────
+// 1. Initialization – run once (or until DOM ready)
+// ────────────────────────────────────────────────
+useEffect(() => {
+  let isActive = true;
 
-    const defaultDeactivateDate = document.querySelectorAll(
-      'input[name="deactivate_from_date"][id="deactivate_from_date"]',
-    );
-    const defaultDeactivateTime = document.querySelectorAll(
-      'input[name="deactivate_from_time"][id="deactivate_from_time"]',
-    );
+  const tryInit = () => {
+    if (!isActive) return false;
 
-    const countDownElementDate = document.querySelectorAll('input[name="countdown_till_date"][id="countdown_till_date"]');
-    const countDownElementTime = document.querySelectorAll('input[name="countdown_till_time"][id="countdown_till_time"]');
+    const actDate   = document.querySelector('input[name="activate_from_date"]#activate_from_date');
+    const actTime   = document.querySelector('input[name="activate_from_time"]#activate_from_time');
+    const deactDate = document.querySelector('input[name="deactivate_from_date"]#deactivate_from_date');
+    const deactTime = document.querySelector('input[name="deactivate_from_time"]#deactivate_from_time');
+    const cntDate   = document.querySelector('input[name="countdown_till_date"]#countdown_till_date');
+    const cntTime   = document.querySelector('input[name="countdown_till_time"]#countdown_till_time');
 
-    if (defaultActivateDate[0].value !== '' || defaultDeactivateDate[0].value !== '' || countDownElementDate !== '') {
-      defaultActivateDate[0].placeholder = defaultActivateDate[0].value;
-      defaultDeactivateDate[0].placeholder = defaultDeactivateDate[0].value;
-      countDownElementDate[0].placeholder = countDownElementDate[0].value;
+    if (!actDate || !actTime || !deactDate || !deactTime || !cntDate || !cntTime) {
+      return false; // not ready → retry
     }
 
-    newValueInput(defaultActivateDate, activateDate);
-    newValueInput(defaultActivateTime, '01:00:00');
+    // Set placeholders if value exists
+    if (actDate.value)   actDate.placeholder   = actDate.value;
+    if (deactDate.value) deactDate.placeholder = deactDate.value;
+    if (cntDate.value)   cntDate.placeholder   = cntDate.value;
 
-    newValueInput(defaultDeactivateDate, deactivateDate);
-    newValueInput(defaultDeactivateTime, '00:59:00');
+    // Apply default times only when empty
+    const applyIfEmpty = (el, value) => {
+      if (el && !el.value?.trim()) {
+        el.value = value;
+        el.dispatchEvent(new Event('input',  { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    };
 
-    newValueInput(countDownElementDate, countDate);
-    newValueInput(countDownElementTime, '23:59:00');
+    applyIfEmpty(actTime,   '01:00:00');
+    applyIfEmpty(deactTime, '00:59:00');
+    applyIfEmpty(cntTime,   '23:59:00');
 
-    const offertInputNode = document.querySelectorAll('input[name^=offer_text]');
-    setOfferInput(offertInputNode);
-  }, [activateDate, deactivateDate, countDate]);
+    // Optional: default dates to today when empty
+    const today = new Date().toISOString().split('T')[0];
+    applyIfEmpty(actDate,   today);
+    applyIfEmpty(deactDate, today);
+    // usually do NOT force countdown date
+
+    // Read current values into React state (once)
+    setActivateDate(actDate.value || '');
+    setDeactivateDate(deactDate.value || '');
+    setCountDate(cntDate.value || '');
+
+    // Collect offer inputs
+    setOfferInput(Array.from(document.querySelectorAll('input[name^="offer_text"]')));
+
+    return true;
+  };
+
+  // Try right now
+  if (tryInit()) return;
+
+  // Retry if inputs not yet in DOM (popup loading delay)
+  const id = setInterval(() => {
+    if (tryInit()) clearInterval(id);
+  }, 300);
+
+  return () => {
+    isActive = false;
+    clearInterval(id);
+  };
+}, []); // ← important: empty deps
+
+  useEffect(() => {
+  const actDate = document.querySelector('input[name="activate_from_date"]#activate_from_date');
+  if (actDate && actDate.value !== activateDate) {
+    actDate.value = activateDate;
+    actDate.dispatchEvent(new Event('input',  { bubbles: true }));
+    actDate.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}, [activateDate]);
+
+useEffect(() => {
+  const deactDate = document.querySelector('input[name="deactivate_from_date"]#deactivate_from_date');
+  if (deactDate && deactDate.value !== deactivateDate) {
+    deactDate.value = deactivateDate;
+    deactDate.dispatchEvent(new Event('input',  { bubbles: true }));
+    deactDate.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}, [deactivateDate]);
+
+useEffect(() => {
+  const cntDate = document.querySelector('input[name="countdown_till_date"]#countdown_till_date');
+  if (cntDate && cntDate.value !== countDate) {
+    cntDate.value = countDate;
+    cntDate.dispatchEvent(new Event('input',  { bubbles: true }));
+    cntDate.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}, [countDate]);
 
   useEffect(() => {
     if (data.length === 0) return;

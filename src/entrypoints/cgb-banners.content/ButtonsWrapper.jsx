@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { langSlugDesktop } from './assets';
 import { getModal } from './assets';
 import Button from './Components/Button';
+import Swal from 'sweetalert2';
+import emptyUpdate from './img/empty_update.gif';
+
 import './styles/style.scss';
 
 export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
@@ -37,6 +40,55 @@ export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
     }
   };
 
+  const areDateFieldsEmpty = () => {
+    const activateDateInput = document.querySelectorAll('input[class="input__actOrDeact"][type="date"]')[0];
+    const deactivateDateInput = document.querySelectorAll('input[class="input__actOrDeact"][type="date"]')[1];
+
+    const activateIsEmpty = !activateDateInput?.value?.trim()
+    const deactivateIsEmpty = !deactivateDateInput?.value?.trim()
+
+    console.log('activate date is empty:', activateIsEmpty);
+    console.log('deactivate date is empty:', deactivateIsEmpty);
+    
+
+    return activateIsEmpty || deactivateIsEmpty;
+  }
+
+  const handleUpdateClick = async () => {
+    setLoading('update')
+
+    if(areDateFieldsEmpty()) {
+    const result = await Swal.fire({
+        title: 'Empty activation/deactivation dates',
+        html: `
+          <div style="text-align: left; font-size: 16px; line-height: 1.5;">
+            One or both date fields (<strong>Activate from</strong> and/or <strong>Deactivate from</strong>) are empty.<br><br>
+            <strong>If you continue:</strong><br>
+            • Activation date → <strong>today 01:00:00</strong><br>
+            • Deactivation date → <strong>today 00:59:00</strong><br><br>
+            Continue anyway?
+          </div>
+          <img src=${emptyUpdate} alt="success" style="width:400px;" />
+        `,
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, continue',
+        cancelButtonText: 'Cancel / go back',
+        reverseButtons: true,
+        allowOutsideClick: false,
+    })
+
+
+    if(!result.isConfirmed) {
+      setLoading(null);
+      return;
+    } 
+    }
+
+    realUpdate();
+  }
+
   const realUpdate = () => {
     setLoading('update');
     const fuckingUpdate = document.querySelector('input[type="submit"][name="update"]');
@@ -62,7 +114,7 @@ export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
         text={'Fill in the text'}
       />
       <Button
-        componentFunction={realUpdate}
+        componentFunction={handleUpdateClick}
         name="Update"
         className="update"
         loading={loading === 'update'}

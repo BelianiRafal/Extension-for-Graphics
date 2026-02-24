@@ -60,48 +60,48 @@ export const COUNTRY_CASHBACK = {
   'UK-PL': 'polish',
   UK: 'english',
   'SK-HU': 'Hungarian',
-  'SK-UK': 'english',
+  'SK-EN': 'english',
   'SK-CZ': 'czech',
   SK: 'slovak',
   SE: 'swedish',
-  'SE-UK': 'english',
+  'SE-EN': 'english',
   RO: 'romanian',
-  'RO-UK': 'english',
+  'RO-EN': 'english',
   PT: 'portugal',
-  'PT-UK': 'english',
+  'PT-EN': 'english',
   PL: 'polish',
-  'PL-UK': 'english',
+  'PL-EN': 'english',
   NO: 'norsk',
-  'NO-UK': 'english',
+  'NO-EN': 'english',
   'NL-FR': 'french',
-  'NL-UK': 'english',
+  'NL-EN': 'english',
   NL: 'dutch',
   IT: 'italian',
-  'IT-UK': 'english',
+  'IT-EN': 'english',
   HU: 'Hungarian',
-  'HU-UK': 'english',
+  'HU-EN': 'english',
   FR: 'french',
   'FR-NL': 'dutch',
   'FR-DE': 'germanDE',
-  'FR-UK': 'english',
+  'FR-EN': 'english',
   FI: 'finnish',
-  'FI-UK': 'english',
+  'FI-EN': 'english',
   'FI-SE': 'swedish',
   ES: 'spanish',
-  'ES-UK': 'english',
+  'ES-EN': 'english',
   DK: 'danish',
-  'DK-UK': 'english',
-  'DE-AT': 'germanDE',
-  'DE-AT-UK': 'english',
+  'DK-EN': 'english',
+  DEAT: 'germanDE',
+  'DEAT-EN': 'english',
   CZ: 'czech',
-  'CZ-UK': 'english',
+  'CZ-EN': 'english',
   'CZ-SK': 'slovak',
   CH: 'german',
-  'CH-UK': 'english',
+  'CH-EN': 'english',
   'CH-FR': 'french',
   'CH-IT': 'italian',
   'BE-DE': 'germanDE',
-  'BE-UK': 'english',
+  'BE-EN': 'english',
   'BE-FR': 'french',
   'BE-NL': 'dutch',
 
@@ -262,7 +262,9 @@ export const filledCashback = (item, btnArray, currentShop) => {
   const devices = {
     pic: 'DESKTOP',
     mobile_pic: 'MOBILE',
-  }
+  };
+
+  console.log('currentShop', currentShop, item, btnArray);
 
   const fileKey = item.name
     .replace(/\.[^/.]+$/, '')
@@ -271,42 +273,55 @@ export const filledCashback = (item, btnArray, currentShop) => {
 
   const fileKeyParts = fileKey.split('_');
   const slugParts = fileKeyParts.filter(part => isNaN(part) && part !== 'DESKTOP' && part !== 'MOBILE');
-  const fileSlug = slugParts[0]
+  const fileSlug = slugParts[0];
   const deviceType = fileKeyParts.find(part => part === 'DESKTOP' || part === 'MOBILE');
   const updatedFileKey = slugParts.join('-');
+  
+  let targetShops = [fileSlug];
 
-  const language = COUNTRY_CASHBACK[updatedFileKey];
-
-  if (!language) {
-    console.log('No language mapping for:', updatedFileKey);
-    return;
+  if (fileSlug === 'DEAT') {
+    targetShops = ['DE', 'AT'];
   }
 
+  for (const targetShop of targetShops) {
+    const language = COUNTRY_CASHBACK[updatedFileKey];
 
-  if (language === 'english') {
-    const shopPrefix = updatedFileKey.split('-UK')[0];
-    
-    if (shopPrefix !== currentShop && updatedFileKey.includes('-UK')) {
-      return;
+    if (!language) {
+      console.log('No language mapping for:', updatedFileKey);
+      continue;
     }
-  }
 
-  const languages = Array.isArray(language) ? language : [language];
+    if (language === 'english') {
+      let shopPrefix = updatedFileKey.split('-EN')[0];
 
-  languages.forEach(lang => {
-    const input = btnArray.find(btn => {
-      const btnLanguage = btn.name.match(/\[(.*?)\]/)?.[1];
-      const btnType = btn.name.split('[')[0].trim().toLowerCase();
-      const btnDeviceType = devices[btnType];
-      if (!btnLanguage || !btnDeviceType) return false;
+      if (shopPrefix === 'DEAT' && currentShop === 'DE') {
+        shopPrefix = 'DE';
+      } else if (shopPrefix === 'DEAT' && currentShop === 'AT') {
+        shopPrefix = 'AT';
+      }
 
-      return btnLanguage === lang && btnDeviceType === deviceType && currentShop === fileSlug;
+      if (shopPrefix !== currentShop && updatedFileKey.includes('-EN')) {
+        return;
+      }
+    }
+    const languages = Array.isArray(language) ? language : [language];
+
+    languages.forEach(lang => {
+      const input = btnArray.find(btn => {
+        const btnLanguage = btn.name.match(/\[(.*?)\]/)?.[1];
+        const btnType = btn.name.split('[')[0].trim().toLowerCase();
+        const btnDeviceType = devices[btnType];
+        if (!btnLanguage || !btnDeviceType) return false;
+
+        return btnLanguage === lang && btnDeviceType === deviceType && targetShop === currentShop;
+      });
+
+      if (input) {
+        console.log(`Assigning ${item.name} → shop: ${targetShop}, lang: ${lang}, device: ${deviceType}`);
+        const transferData = new DataTransfer();
+        transferData.items.add(item);
+        input.files = transferData.files;
+      }
     });
-
-    if (input) {
-      const transferData = new DataTransfer();
-      transferData.items.add(item);
-      input.files = transferData.files;
-    }
-  });
+  }
 };
