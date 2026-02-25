@@ -96,7 +96,7 @@ useEffect(() => {
     isActive = false;
     clearInterval(id);
   };
-}, []); // ← important: empty deps
+}, []); // runs once
 
   useEffect(() => {
   const actDate = document.querySelector('input[name="activate_from_date"]#activate_from_date');
