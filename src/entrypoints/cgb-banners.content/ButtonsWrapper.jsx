@@ -59,16 +59,16 @@ export default function ButtonsWrapper({ openModal, offertInput, stateSlug }) {
 
     if(areDateFieldsEmpty()) {
     const result = await Swal.fire({
-        title: 'Please set the date fields in the popup',
+        title: 'Warning',
         html: `
           <div style="text-align: left; font-size: 16px; line-height: 1.15;">
-            One or both date fields (<strong>Activate from</strong> and/or <strong>Deactivate from</strong>) are empty.<br><br>
+            One or both date popup fields (<strong>Activate time</strong> and/or <strong>Deactivate time</strong>) are empty.<br><br>
             <strong>If you continue:</strong><br>
-            • Activation date → <strong>today 01:00:00</strong><br>
-            • Deactivation date → <strong>today 00:59:00</strong><br><br>
+            • Activation date will be <strong>today 01:00:00</strong><br>
+            • Deactivation date will be <strong>today 00:59:00</strong><br><br>
             Continue anyway?
           </div>
-          <img src=${emptyUpdate} alt="success" style="width:400px;" />
+          <img src=${emptyUpdate} alt="success" style="width:400px; margin-top: 10px;" />
         `,
         showCancelButton: true,
         confirmButtonColor: '#d33',
