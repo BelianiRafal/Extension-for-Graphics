@@ -112,7 +112,7 @@ export default defineBackground(() => {
 
           setTimeout(async () => {
             if (currentItem?.files) {
-              await uploadBanners(tabId, currentItem.files);
+              // await uploadBanners(tabId, currentItem.files);
             }
 
             setTimeout(() => {

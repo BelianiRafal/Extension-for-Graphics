@@ -130,7 +130,7 @@ export const SLUG_SHOP = {
   RO: '?shop_id=30',
   HR: '?shop_id=33',
   SI: '?shop_id=34',
-  BEN: '?shop_id=19',
+  BE: '?shop_id=19', 
 };
 
 export function convertToObject(CSV) {
