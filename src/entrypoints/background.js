@@ -117,16 +117,16 @@ export default defineBackground(() => {
 
             setTimeout(() => {
               processNextInQueue();
-            }, 2000);
-          }, 2000);
+            }, 5000);
+          }, 5000);
 
         } catch (error) {
           console.error('Error executing script:', error);
           setTimeout(() => {
             processNextInQueue();
-          }, 2000);
+          }, 5000);
         }
-      }, 2000); 
+      }, 5000); 
     }
   });
 
