@@ -67,8 +67,20 @@ useEffect(() => {
     try {
       const currentShop = getCurrentShop();
       
+      const isCashback = files.some(file => {
+          const fileKey = file.name
+              .replace(/\.[^/.]+$/, '')
+              .trim()
+              .toUpperCase();
+
+          const parts = fileKey.split('_');
+          const slugParts = parts.filter(p => isNaN(p) && p !== 'DESKTOP' && p !== 'MOBILE');
+          
+          return slugParts.length > 1
+        })
+
       for (const item of files) {
-        if (!item.name.includes('desktop') && !item.name.includes('mobile')) {
+        if (isCashback) {
           filledCashback(item, desktopFiles, currentShop);
           filledCashback(item, cashbackMobile, currentShop);
         } else {
@@ -77,7 +89,9 @@ useEffect(() => {
         }
       }
 
-      getModal('nyan', 'Files added to inputs!');
+      // getModal('nyan', 'Files added to inputs!');
+
+       getModal('nyan', 'Files added to inputs! ' + (isCashback ? 'Cashback!' : 'Regular campaign!'));
     } catch (e) {
       console.log(e);
       getModal('cryMen', 'Something went wrong');

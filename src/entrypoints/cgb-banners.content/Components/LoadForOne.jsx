@@ -69,11 +69,17 @@ export default function LoadForOne() {
       const processData = [];
 
       for (const slug of Object.keys(filesBySlug)) {
-        const shopIds = SLUG_SHOP[slug];
+        let targetSlugs = [slug]
+        if (slug === 'DEAT') {
+          targetSlugs = ['DE', 'AT'];
+        }
 
-        if (!shopIds) {
-          console.warn(`Shop ID not found for: ${slug}`);
-          continue;
+        for (const targetSlug of targetSlugs) {
+          const shopIds = SLUG_SHOP[targetSlug];
+
+          if (!shopIds) {
+            console.warn(`Shop ID not found for: ${targetSlug}`);
+            continue;
         }
 
         if (Array.isArray(shopIds)) {
@@ -94,6 +100,7 @@ export default function LoadForOne() {
           });
         }
       }
+    }
 
       if (processData.length === 0) {
         getModal('error', 'No valid files found in ZIP');
