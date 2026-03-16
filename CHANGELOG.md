@@ -1,4 +1,32 @@
 # Changelog
+[Compare changes](https://github.com/BelianiRafal/Extension-for-Graphics/compare/v1.1.0...v1.1.1)
+
+### 🐛 Bug Fixes
+
+- waiting time ([f192aaf](https://github.com/BelianiRafal/Extension-for-Graphics/commit/f192aaf))
+- LoadForOne DE/AT fix ([915783c](https://github.com/BelianiRafal/Extension-for-Graphics/commit/915783c))
+- DEAT + time bug fix ([810188d](https://github.com/BelianiRafal/Extension-for-Graphics/commit/810188d))
+- choosing between cashback and regular banners ([ddc8de2](https://github.com/BelianiRafal/Extension-for-Graphics/commit/ddc8de2))
+- mobile cashback banners:) ([adf0093](https://github.com/BelianiRafal/Extension-for-Graphics/commit/adf0093))
+- proper loading of cahsback banners (desktop) ([5e510b9](https://github.com/BelianiRafal/Extension-for-Graphics/commit/5e510b9))
+
+### 🧹 Chores
+
+- release v1.1.1 ([076a0e6](https://github.com/BelianiRafal/Extension-for-Graphics/commit/076a0e6))
+
+### 📄 Miscellaneous
+
+- Merge pull request #4 from ShadowDrake21/dima-changes ([816ed9f](https://github.com/BelianiRafal/Extension-for-Graphics/commit/816ed9f)) ([#4](https://github.com/BelianiRafal/Extension-for-Graphics/issues/4), [#4](https://github.com/BelianiRafal/Extension-for-Graphics/issues/4))
+- Merge branch 'main' into dima-changes ([fd5a3ca](https://github.com/BelianiRafal/Extension-for-Graphics/commit/fd5a3ca))
+- countdown fix ([66a8d4c](https://github.com/BelianiRafal/Extension-for-Graphics/commit/66a8d4c))
+- additional ([9957c8f](https://github.com/BelianiRafal/Extension-for-Graphics/commit/9957c8f))
+
+### Contributors
+
+- Kamil Kazaniecki <kamil.kazaniecki@beliani.net>
+- ShadowDrake21 <dimka670020040@gmail.com>
+- kkazzann <kamil.kazaniecki@beliani.net>
+
 
 [Compare changes](https://github.com/BelianiRafal/Extension-for-Graphics/compare/v1.0.2...v1.1.0)
 
