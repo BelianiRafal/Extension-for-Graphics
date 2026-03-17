@@ -18,12 +18,6 @@ async function saveState(state: UpdateState): Promise<void> {
   await browser.storage.local.set({ [STORAGE_KEY]: state });
 }
 
-function pickDownloadUrl(release: any): string | undefined {
-  const assets: any[] = Array.isArray(release?.assets) ? release.assets : [];
-  const zip = assets.find((a: any) => typeof a?.name === 'string' && a.name.endsWith('.zip'));
-  return zip?.browser_download_url;
-}
-
 async function notify(state: UpdateState): Promise<void> {
   if (!state.remoteVersion) return;
 
@@ -34,6 +28,7 @@ async function notify(state: UpdateState): Promise<void> {
     title: 'Outdated version detected!',
     message: `Download the latest extension (${state.remoteVersion}) on GitHub (click).`,
     priority: 2,
+    requireInteraction: true,
   } as any);
 }
 
@@ -42,7 +37,7 @@ export function initUpdateChecker(): void {
     if (id !== NOTIFICATION_ID) return;
 
     const state = await getState();
-    const url = state.downloadUrl ?? state.releaseUrl ?? RELEASE_PAGE_URL;
+    const url = state.releaseUrl ?? RELEASE_PAGE_URL;
     await browser.tabs.create({ url });
     await browser.notifications.clear(id);
   });
@@ -64,7 +59,6 @@ export async function checkForUpdate(): Promise<void> {
       remoteTag: undefined,
       remoteVersion: undefined,
       releaseUrl: undefined,
-      downloadUrl: undefined,
     });
   }
   state.lastVersion = version;
@@ -111,8 +105,7 @@ export async function checkForUpdate(): Promise<void> {
 
   state.remoteTag = release.tag_name;
   state.remoteVersion = remoteVersion;
-  state.releaseUrl = release.html_url;
-  state.downloadUrl = pickDownloadUrl(release) ?? release.html_url;
+  state.releaseUrl = release.html_url ?? RELEASE_PAGE_URL;
 
   await saveState(state);
 

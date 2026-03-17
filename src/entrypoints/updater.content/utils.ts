@@ -13,7 +13,6 @@ export interface UpdateState {
   remoteTag?: string;
   remoteVersion?: string;
   releaseUrl?: string;
-  downloadUrl?: string;
 }
 
 export function normalizeVersion(raw: string | undefined | null): string | null {
