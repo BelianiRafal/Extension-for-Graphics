@@ -7,13 +7,9 @@ export default defineConfig({
   manifest: {
     permissions: ['tabs', 'scripting', 'storage', 'notifications'],
     host_permissions: [
-      'https://prolodev.prologistics.info/shop_banners.php*',
-      'https://www.prologistics.info/shop_banners.php*',
-      'https://prolodev.prologistics.info/shop_banner.php*',
-      'https://www.prologistics.info/shop_banner.php*',
-      'https://prolodev.prologistics.info/',
-      'https://prolodev.prologistics.info/start.php',
-      'https://prolodev.prologistics.info/timestamp_filter.php',
+      'https://prologistics.info/*',
+      'https://*.prologistics.info/*',
+      'https://api.github.com/*',
       'http://localhost/*',
     ],
   },
