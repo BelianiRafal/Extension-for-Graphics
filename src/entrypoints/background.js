@@ -1,9 +1,20 @@
+import { initUpdateChecker, checkForUpdate } from './updater.content/checker';
+
 export default defineBackground(() => {
+  initUpdateChecker();
+
   let processingQueue = [];
   let currentTabId = null;
   let isProcessing = false;
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message?.action === 'efg:checkForUpdate') {
+      void checkForUpdate().finally(() => {
+        try { sendResponse({ ok: true }); } catch { /* */ }
+      });
+      return true;
+    }
+
     if (message.action === "nextTab") {
       chrome.tabs.query({ currentWindow: true }, async (tabs) => {
         const activeTabs = await chrome.tabs.query({ 
