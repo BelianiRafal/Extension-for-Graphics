@@ -5,7 +5,7 @@ export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-react'],
   manifest: {
-    permissions: ['tabs', 'scripting'],
+    permissions: ['tabs', 'scripting', 'storage', 'notifications'],
     host_permissions: [
       'https://prolodev.prologistics.info/shop_banners.php*',
       'https://www.prologistics.info/shop_banners.php*',
